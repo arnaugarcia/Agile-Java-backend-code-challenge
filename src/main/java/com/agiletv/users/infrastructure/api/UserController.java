@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-public class UserController {
+class UserController {
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserByUsernameUseCase getUserByUsernameUseCase;
     private final CreateUserUseCase createUserUseCase;
