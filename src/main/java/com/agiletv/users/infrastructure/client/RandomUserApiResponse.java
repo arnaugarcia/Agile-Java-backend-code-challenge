@@ -2,7 +2,7 @@ package com.agiletv.users.infrastructure.client;
 
 import java.util.List;
 
-public record RandomUsersResponse(List<Result> results) {
+public record RandomUserApiResponse(List<Result> results) {
     public record Result(
         String gender,
         Name name,
