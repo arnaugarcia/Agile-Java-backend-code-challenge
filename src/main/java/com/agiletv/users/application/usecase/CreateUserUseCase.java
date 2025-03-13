@@ -4,7 +4,9 @@ package com.agiletv.users.application.usecase;
 import com.agiletv.users.domain.model.User;
 import com.agiletv.users.domain.repository.UserRepository;
 import com.agiletv.users.infrastructure.api.dto.UserRequestDTO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CreateUserUseCase {
 
     private final UserRepository userRepository;
@@ -28,5 +30,6 @@ public class CreateUserUseCase {
             .city(userRequest.city())
             .build();
         userRepository.save(user);
+        log.debug("User {} created", userRequest.username());
     }
 }

@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RandomUserClient {
 
@@ -22,10 +24,13 @@ public class RandomUserClient {
         String url = API_URL + count;
         RandomUserApiResponse response;
         try {
+            log.debug("Fetching random users from {}", url);
             response = restTemplate.getForObject(url, RandomUserApiResponse.class);
         } catch (RestClientException e) {
             throw new ExternalApiException("Error calling Random User API");
         }
+
+        log.debug("Fetched random users from {}", url);
 
         if (Objects.isNull(response)) {
             throw new ExternalApiException("Random response is empty");
@@ -46,6 +51,8 @@ public class RandomUserClient {
 
             users.add(new User(username, name, email, gender, picture, country, state, city));
         }
+
+        log.debug("Parsed {} random users", users.size());
 
         return users;
     }

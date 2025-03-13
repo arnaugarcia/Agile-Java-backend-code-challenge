@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 public class UserTreeService {
 
     public List<UserTreeDTO> buildFrom(List<User> users) {
@@ -39,6 +41,7 @@ public class UserTreeService {
             }
             tree.add(new UserTreeDTO(countryEntry.getKey(), stateDTOs));
         }
+        log.debug("Finished building user tree, countries: {}", tree.size());
 
         return tree;
     }

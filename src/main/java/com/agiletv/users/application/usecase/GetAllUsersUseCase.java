@@ -5,6 +5,7 @@ import com.agiletv.users.domain.repository.UserRepository;
 import java.util.List;
 
 public class GetAllUsersUseCase {
+
     private final UserRepository userRepository;
 
     public GetAllUsersUseCase(UserRepository userRepository) {
