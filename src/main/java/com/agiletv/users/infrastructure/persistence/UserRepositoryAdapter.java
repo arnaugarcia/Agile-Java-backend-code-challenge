@@ -4,7 +4,6 @@ import com.agiletv.users.domain.model.User;
 import com.agiletv.users.domain.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,7 +23,7 @@ public class UserRepositoryAdapter implements UserRepository {
         return jpaUserRepository.findAll()
             .stream()
             .map(this::toDomain)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override

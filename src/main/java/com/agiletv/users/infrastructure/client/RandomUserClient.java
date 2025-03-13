@@ -1,11 +1,14 @@
 package com.agiletv.users.infrastructure.client;
 
+import com.agiletv.users.domain.exception.ExternalApiException;
 import com.agiletv.users.domain.model.User;
+import com.agiletv.users.infrastructure.client.RandomUsersResponse.Result;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -17,24 +20,29 @@ public class RandomUserClient {
 
     public List<User> fetchRandomUsers(int count) {
         String url = API_URL + count;
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        RandomUsersResponse response;
+        try {
+            response = restTemplate.getForObject(url, RandomUsersResponse.class);
+        } catch (RestClientException e) {
+            throw new ExternalApiException("Error calling Random User API");
+        }
+
+        if (Objects.isNull(response)) {
+            throw new ExternalApiException("Random response is empty");
+        }
 
         List<User> users = new ArrayList<>();
-        List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
+        List<Result> results = response.results();
 
-        for (Map<String, Object> result : results) {
-            Map<String, Object> nameMap = (Map<String, Object>) result.get("name");
-            Map<String, Object> locationMap = (Map<String, Object>) result.get("location");
-            Map<String, Object> pictureMap = (Map<String, Object>) result.get("picture");
-
-            String username = (String) ((Map<String, Object>) result.get("login")).get("username");
-            String name = nameMap.get("first") + " " + nameMap.get("last");
-            String email = (String) result.get("email");
-            String gender = (String) result.get("gender");
-            String picture = (String) pictureMap.get("large");
-            String country = (String) locationMap.get("country");
-            String state = (String) locationMap.get("state");
-            String city = (String) locationMap.get("city");
+        for (Result result : results) {
+            String username = result.login().username();
+            String name = result.name().first() + " " + result.name().last();
+            String email = result.email();
+            String gender = result.gender();
+            String picture = result.picture().large();
+            String country = result.location().country();
+            String state = result.location().state();
+            String city = result.location().city();
 
             users.add(new User(username, name, email, gender, picture, country, state, city));
         }
