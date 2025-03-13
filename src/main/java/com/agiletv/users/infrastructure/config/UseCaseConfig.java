@@ -1,11 +1,13 @@
 package com.agiletv.users.infrastructure.config;
 
+import com.agiletv.users.application.service.UserTreeService;
 import com.agiletv.users.application.usecase.CreateUserUseCase;
 import com.agiletv.users.application.usecase.DeleteUserUseCase;
 import com.agiletv.users.application.usecase.GenerateUsersUseCase;
 import com.agiletv.users.application.usecase.GetAllUsersUseCase;
 import com.agiletv.users.application.usecase.GetUserByUsernameUseCase;
 import com.agiletv.users.application.usecase.UpdateUserUseCase;
+import com.agiletv.users.application.usecase.UserTreeUseCase;
 import com.agiletv.users.domain.repository.UserRepository;
 import com.agiletv.users.infrastructure.client.RandomUserClient;
 import org.springframework.context.annotation.Bean;
@@ -42,5 +44,10 @@ class UseCaseConfig {
     @Bean
     public GenerateUsersUseCase generateUsersUseCase(UserRepository userRepository, RandomUserClient randomUserClient) {
         return new GenerateUsersUseCase(userRepository, randomUserClient);
+    }
+
+    @Bean
+    public UserTreeUseCase userTreeUseCase(UserRepository userRepository) {
+        return new UserTreeUseCase(userRepository, new UserTreeService());
     }
 }

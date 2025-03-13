@@ -1,11 +1,13 @@
 package com.agiletv.users.infrastructure.api;
 
+import com.agiletv.users.application.dto.UserTreeDTO;
 import com.agiletv.users.application.usecase.CreateUserUseCase;
 import com.agiletv.users.application.usecase.DeleteUserUseCase;
 import com.agiletv.users.application.usecase.GenerateUsersUseCase;
 import com.agiletv.users.application.usecase.GetAllUsersUseCase;
 import com.agiletv.users.application.usecase.GetUserByUsernameUseCase;
 import com.agiletv.users.application.usecase.UpdateUserUseCase;
+import com.agiletv.users.application.usecase.UserTreeUseCase;
 import com.agiletv.users.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ public class UserController {
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GenerateUsersUseCase generateUsersUseCase;
+    private final UserTreeUseCase userTreeUseCase;
 
     @GetMapping("/")
     public List<User> getAllUsers() {
@@ -53,5 +56,10 @@ public class UserController {
     @GetMapping("/generate/{number}")
     public void generateUsers(@PathVariable int number) {
         generateUsersUseCase.execute(number);
+    }
+
+    @GetMapping("/tree")
+    public List<UserTreeDTO> getUserTree() {
+        return userTreeUseCase.execute();
     }
 }
