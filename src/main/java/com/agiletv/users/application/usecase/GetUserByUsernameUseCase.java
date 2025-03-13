@@ -1,7 +1,7 @@
 package com.agiletv.users.application.usecase;
 
-import com.agiletv.users.domain.model.User;
 import com.agiletv.users.domain.repository.UserRepository;
+import com.agiletv.users.infrastructure.api.dto.UserDTO;
 import java.util.Optional;
 
 public class GetUserByUsernameUseCase {
@@ -12,7 +12,8 @@ public class GetUserByUsernameUseCase {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> execute(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<UserDTO> execute(String username) {
+        return userRepository.findByUsername(username)
+            .map(UserDTO::from);
     }
 }

@@ -1,6 +1,7 @@
 package com.agiletv.users.domain.model;
 
 import io.micrometer.common.util.StringUtils;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class User {
     private String state;
     private String city;
 
+    @Builder
     public User(String username,
                 String name,
                 String email,

@@ -1,7 +1,7 @@
 package com.agiletv.users.application.service;
 
-import com.agiletv.users.application.dto.UserDTO;
-import com.agiletv.users.application.dto.UserTreeDTO;
+import com.agiletv.users.infrastructure.api.dto.UserDTO;
+import com.agiletv.users.infrastructure.api.dto.UserTreeDTO;
 import com.agiletv.users.domain.model.User;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,11 +23,11 @@ public class UserTreeService {
         }
 
         List<UserTreeDTO> tree = new ArrayList<>();
-        for (Map.Entry<String, Map<String, Map<String, List<User>>>> countryEntry : groupedUsers.entrySet()) {
+        for (var countryEntry : groupedUsers.entrySet()) {
             List<UserTreeDTO.StateDTO> stateDTOs = new ArrayList<>();
-            for (Map.Entry<String, Map<String, List<User>>> stateEntry : countryEntry.getValue().entrySet()) {
+            for (var stateEntry : countryEntry.getValue().entrySet()) {
                 List<UserTreeDTO.CityDTO> cityDTOs = new ArrayList<>();
-                for (Map.Entry<String, List<User>> cityEntry : stateEntry.getValue().entrySet()) {
+                for (var cityEntry : stateEntry.getValue().entrySet()) {
                     List<UserDTO> userDTOs = new ArrayList<>();
                     for (User user : cityEntry.getValue()) {
                         userDTOs.add(new UserDTO(user.getUsername(), user.getName(), user.getEmail(), user.getGender(),
