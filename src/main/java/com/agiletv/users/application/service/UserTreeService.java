@@ -14,7 +14,6 @@ public class UserTreeService {
     public List<UserTreeDTO> buildFrom(List<User> users) {
         Map<String, Map<String, Map<String, List<User>>>> groupedUsers = new HashMap<>();
 
-        // Agrupar usuarios por país, estado y ciudad
         for (User user : users) {
             groupedUsers
                 .computeIfAbsent(user.getCountry(), k -> new HashMap<>())
@@ -23,7 +22,6 @@ public class UserTreeService {
                 .add(user);
         }
 
-        // Convertir el mapa a un DTO utilizando records
         List<UserTreeDTO> tree = new ArrayList<>();
         for (Map.Entry<String, Map<String, Map<String, List<User>>>> countryEntry : groupedUsers.entrySet()) {
             List<UserTreeDTO.StateDTO> stateDTOs = new ArrayList<>();
