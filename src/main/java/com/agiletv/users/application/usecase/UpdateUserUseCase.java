@@ -21,7 +21,7 @@ public class UpdateUserUseCase {
         user.setCountry(userRequest.country());
         user.setPicture(userRequest.picture());
         user.setState(userRequest.state());
-        userRepository.update(user);
+        userRepository.save(user);
         log.debug("User {} updated", username);
     }
 }

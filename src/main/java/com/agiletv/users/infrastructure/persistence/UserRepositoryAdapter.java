@@ -37,11 +37,6 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     @Override
-    public void update(User user) {
-        jpaUserRepository.save(toEntity(user));
-    }
-
-    @Override
     public void deleteByUsername(String username) {
         jpaUserRepository.deleteById(username);
     }
