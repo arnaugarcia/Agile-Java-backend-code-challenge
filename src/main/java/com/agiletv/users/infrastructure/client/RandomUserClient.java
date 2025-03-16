@@ -39,20 +39,24 @@ public class RandomUserClient {
         List<Result> results = response.results();
 
         for (Result result : results) {
-            String username = result.login().username();
-            String name = result.name().first() + " " + result.name().last();
-            String email = result.email();
-            String gender = result.gender();
-            String picture = result.picture().large();
-            String country = result.location().country();
-            String state = result.location().state();
-            String city = result.location().city();
-
-            users.add(new User(username, name, email, gender, picture, country, state, city));
+            users.add(buildFrom(result));
         }
 
         log.debug("Parsed {} random users", users.size());
 
         return users;
+    }
+
+    private static User buildFrom(Result result) {
+        return User.builder()
+            .username(result.login().username())
+            .name(result.name().first() + " " + result.name().last())
+            .email(result.email())
+            .gender(result.gender())
+            .picture(result.picture().large())
+            .country(result.location().country())
+            .state(result.location().state())
+            .city(result.location().city())
+            .build();
     }
 }
