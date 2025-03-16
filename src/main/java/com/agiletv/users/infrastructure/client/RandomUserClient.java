@@ -1,6 +1,5 @@
 package com.agiletv.users.infrastructure.client;
 
-import com.agiletv.users.domain.exception.ExternalApiException;
 import com.agiletv.users.domain.model.User;
 import com.agiletv.users.infrastructure.client.RandomUserApiResponse.Result;
 import java.util.ArrayList;
@@ -27,13 +26,13 @@ public class RandomUserClient {
             log.debug("Fetching random users from {}", url);
             response = restTemplate.getForObject(url, RandomUserApiResponse.class);
         } catch (RestClientException e) {
-            throw new ExternalApiException("Error calling Random User API");
+            throw new RandomUserApiException("Error calling Random User API");
         }
 
         log.debug("Fetched random users from {}", url);
 
         if (Objects.isNull(response)) {
-            throw new ExternalApiException("Random response is empty");
+            throw new RandomUserApiException("Random response is empty");
         }
 
         List<User> users = new ArrayList<>();
