@@ -19,7 +19,7 @@ class UserTreeServiceTest {
     private static final String NAME = "John Doe";
     private static final String EMAIL = "jdoe@example.com";
     private static final Gender GENDER = Gender.MALE;
-    private static final String PICTURE = "http://example.com/pic.jpg";
+    private static final String PICTURE = "https://example.com/pic.jpg";
     private static final String COUNTRY = "USA";
     private static final String STATE = "California";
     private static final String CITY = "Los Angeles";
@@ -35,10 +35,10 @@ class UserTreeServiceTest {
             User user = new User(USERNAME, NAME, EMAIL, GENDER, PICTURE, COUNTRY, STATE, CITY);
             List<UserTreeDTO> userTree = userTreeService.buildFrom(List.of(user));
 
-            UserTreeDTO userTreeDTO = userTree.getFirst();
-            UserTreeDTO.StateDTO stateDTO = userTreeDTO.states().getFirst();
-            UserTreeDTO.CityDTO cityDTO = stateDTO.cities().getFirst();
-            UserDTO userDTO = cityDTO.users().getFirst();
+            var userTreeDTO = userTree.getFirst();
+            var stateDTO = userTreeDTO.states().getFirst();
+            var cityDTO = stateDTO.cities().getFirst();
+            var userDTO = cityDTO.users().getFirst();
 
             assertAll(
                 () -> assertEquals(1, userTree.size()),
@@ -54,7 +54,7 @@ class UserTreeServiceTest {
 
         @Test
         void shouldHandleEmptyUserList() {
-            List<UserTreeDTO> userTree = userTreeService.buildFrom(List.of());
+            var userTree = userTreeService.buildFrom(List.of());
 
             assertTrue(userTree.isEmpty());
         }

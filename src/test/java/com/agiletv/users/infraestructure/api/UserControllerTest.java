@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.agiletv.users.domain.model.User;
 import com.agiletv.users.infrastructure.api.dto.UserRequestDTO;
 import com.agiletv.users.infrastructure.persistence.GenderEntity;
 import com.agiletv.users.infrastructure.persistence.JpaUserRepository;
@@ -125,6 +126,16 @@ class UserControllerTest {
                     .content(userJson))
                 .andExpect(status().isCreated());
         }
+
+        @Test
+        void shouldReturn400IfUserAlreadyExists() throws Exception {
+            when(jpaUserRepository.findById(USERNAME)).thenReturn(Optional.ofNullable(userEntity));
+
+            mockMvc.perform(post(API_USERS)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userEntity)))
+                .andExpect(status().isBadRequest());
+        }
     }
 
     @Nested
@@ -179,6 +190,44 @@ class UserControllerTest {
                 .andExpect(status().isOk());
         }
 
+        @Test
+        void shouldReturn404IfUserNotFound() throws Exception {
+            when(jpaUserRepository.findById(UNKNOWN_USERNAME)).thenReturn(Optional.empty());
+
+            mockMvc.perform(put(API_USERS_USERNAME, USERNAME)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(getUpdatedUser())))
+                .andExpect(status().isNotFound());
+        }
+
+        @Test
+        void shouldReturn400IfNoBody() throws Exception {
+            mockMvc.perform(put(API_USERS_USERNAME, USERNAME)
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void shouldReturn400IfNoUsername() throws Exception {
+            var updatedUser = """
+                {
+                  "username": null,
+                  "name": "John Doe2",
+                  "email": "johndoe@doe.com",
+                  "gender": "female",
+                  "picture": "https://example.com/pic2.jpg",
+                  "country": "Europe",
+                  "state": "Barcelona",
+                  "city": "Spain"
+                }
+                """;
+
+            mockMvc.perform(put(API_USERS_USERNAME, USERNAME)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(updatedUser))
+                .andExpect(status().isBadRequest());
+        }
+
         private static UserRequestDTO getUpdatedUser() {
             return new UserRequestDTO(
                 "jdoe2",
@@ -189,16 +238,6 @@ class UserControllerTest {
                 "Europe",
                 "Barcelona",
                 "Spain");
-        }
-
-        @Test
-        void shouldReturn404IfUserNotFound() throws Exception {
-            when(jpaUserRepository.findById(UNKNOWN_USERNAME)).thenReturn(Optional.empty());
-
-            mockMvc.perform(put(API_USERS_USERNAME, USERNAME)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(getUpdatedUser())))
-                .andExpect(status().isNotFound());
         }
     }
 }

@@ -23,7 +23,7 @@ class UserBuilderTest {
                 .name("John Doe")
                 .email("jdoe@example.com")
                 .gender(Gender.MALE)
-                .picture("http://example.com/pic.jpg")
+                .picture("https://example.com/pic.jpg")
                 .country("USA")
                 .state("California")
                 .city("Los Angeles")
@@ -34,7 +34,7 @@ class UserBuilderTest {
                 () -> assertEquals("John Doe", user.name()),
                 () -> assertEquals("jdoe@example.com", user.email()),
                 () -> assertEquals(Gender.MALE, user.gender()),
-                () -> assertEquals("http://example.com/pic.jpg", user.picture()),
+                () -> assertEquals("https://example.com/pic.jpg", user.picture()),
                 () -> assertEquals("USA", user.country()),
                 () -> assertEquals("California", user.state()),
                 () -> assertEquals("Los Angeles", user.city())
@@ -47,7 +47,7 @@ class UserBuilderTest {
                 .name("John Doe")
                 .email("jdoe@example.com")
                 .gender(Gender.MALE)
-                .picture("http://example.com/pic.jpg")
+                .picture("https://example.com/pic.jpg")
                 .country("USA")
                 .state("California")
                 .city("Los Angeles")
@@ -57,7 +57,7 @@ class UserBuilderTest {
                 .username("jdoe")
                 .email("jdoe@example.com")
                 .gender(Gender.MALE)
-                .picture("http://example.com/pic.jpg")
+                .picture("https://example.com/pic.jpg")
                 .country("USA")
                 .state("California")
                 .city("Los Angeles")
@@ -87,7 +87,7 @@ class UserBuilderTest {
                 .name("John Doe")
                 .email("jdoe@example.com")
                 .gender("invalidGender")
-                .picture("http://example.com/pic.jpg")
+                .picture("https://example.com/pic.jpg")
                 .country("USA")
                 .state("California")
                 .city("Los Angeles")

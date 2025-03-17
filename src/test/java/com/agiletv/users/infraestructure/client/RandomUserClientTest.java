@@ -39,7 +39,7 @@ class RandomUserClientTest {
             when(result.name()).thenReturn(new Name("Mr", "John", "Doe"));
             when(result.email()).thenReturn("jdoe@example.com");
             when(result.gender()).thenReturn("female");
-            when(result.picture()).thenReturn(new Picture("http://example.com/pic.jpg"));
+            when(result.picture()).thenReturn(new Picture("https://example.com/pic.jpg"));
             when(result.location()).thenReturn(new Location("Los Angeles", "California", "USA"));
             when(response.results()).thenReturn(List.of(result));
             when(restTemplate.getForObject(anyString(), eq(RandomUserApiResponse.class))).thenReturn(response);
@@ -53,7 +53,7 @@ class RandomUserClientTest {
                 () -> assertEquals("John Doe", user.name()),
                 () -> assertEquals("jdoe@example.com", user.email()),
                 () -> assertEquals(Gender.FEMALE, user.gender()),
-                () -> assertEquals("http://example.com/pic.jpg", user.picture()),
+                () -> assertEquals("https://example.com/pic.jpg", user.picture()),
                 () -> assertEquals("USA", user.country()),
                 () -> assertEquals("California", user.state()),
                 () -> assertEquals("Los Angeles", user.city())
