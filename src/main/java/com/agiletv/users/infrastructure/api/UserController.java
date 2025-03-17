@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,10 +49,11 @@ class UserController {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved list"),
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/")
-    public List<UserDTO> getAllUsers() {
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         log.debug("REST request to get all users");
-        return getAllUsersUseCase.execute();
+        List<UserDTO> users = getAllUsersUseCase.execute();
+        return ResponseEntity.ok(users);
     }
 
     @Operation(summary = "Get user by username", description = "Retrieve a user by their username")
@@ -60,10 +63,12 @@ class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{username}")
-    public Optional<UserDTO> getUser(
+    public ResponseEntity<UserDTO> getUser(
         @Parameter(description = "Username of the user to be retrieved") @PathVariable String username) {
         log.debug("REST request to find a user by username: {}", username);
-        return getUserByUsernameUseCase.execute(username);
+        Optional<UserDTO> user = getUserByUsernameUseCase.execute(username);
+        return user.map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Operation(summary = "Create a new user", description = "Create a new user with the provided details")
@@ -72,11 +77,12 @@ class UserController {
         @ApiResponse(responseCode = "400", description = "Invalid input"),
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PostMapping("/")
-    public void createUser(
+    @PostMapping
+    public ResponseEntity<UserDTO> createUser(
         @Parameter(description = "Details of the user to be created") @RequestBody UserRequestDTO userRequest) {
         log.debug("REST request to create a new user: {}", userRequest);
         createUserUseCase.execute(userRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Update a user", description = "Update an existing user with the provided details")
@@ -87,11 +93,12 @@ class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{username}")
-    public void updateUser(
+    public ResponseEntity<Void> updateUser(
         @Parameter(description = "Username of the user to be updated") @PathVariable String username,
         @Parameter(description = "Updated details of the user") @RequestBody UserRequestDTO userRequest) {
         log.debug("REST request to update user: {}", userRequest);
         updateUserUseCase.execute(username, userRequest);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Delete a user", description = "Delete a user by their username")
@@ -101,10 +108,11 @@ class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @DeleteMapping("/{username}")
-    public void deleteUser(
+    public ResponseEntity<Void> deleteUser(
         @Parameter(description = "Username of the user to be deleted") @PathVariable String username) {
         log.debug("REST request to delete user: {}", username);
         deleteUserUseCase.execute(username);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Generate users", description = "Generate a specified number of users")
@@ -113,9 +121,10 @@ class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/generate/{number}")
-    public void generateUsers(@Parameter(description = "Number of users to be generated") @PathVariable int number) {
+    public ResponseEntity<Void> generateUsers(@Parameter(description = "Number of users to be generated") @PathVariable int number) {
         log.debug("REST request to generate users: {}", number);
         generateUsersUseCase.execute(number);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Get user tree",
@@ -125,8 +134,9 @@ class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/tree")
-    public List<UserTreeDTO> getUserTree() {
+    public ResponseEntity<List<UserTreeDTO>> getUserTree() {
         log.debug("REST request to get user tree");
-        return userTreeUseCase.execute();
+        List<UserTreeDTO> userTree = userTreeUseCase.execute();
+        return ResponseEntity.ok(userTree);
     }
 }

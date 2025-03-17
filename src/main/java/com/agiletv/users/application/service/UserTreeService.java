@@ -18,9 +18,9 @@ public class UserTreeService {
 
         for (User user : users) {
             groupedUsers
-                .computeIfAbsent(user.getCountry(), k -> new HashMap<>())
-                .computeIfAbsent(user.getState(), k -> new HashMap<>())
-                .computeIfAbsent(user.getCity(), k -> new ArrayList<>())
+                .computeIfAbsent(user.country(), k -> new HashMap<>())
+                .computeIfAbsent(user.state(), k -> new HashMap<>())
+                .computeIfAbsent(user.city(), k -> new ArrayList<>())
                 .add(user);
         }
 
@@ -31,9 +31,8 @@ public class UserTreeService {
                 List<UserTreeDTO.CityDTO> cityDTOs = new ArrayList<>();
                 for (var cityEntry : stateEntry.getValue().entrySet()) {
                     List<UserDTO> userDTOs = new ArrayList<>();
-                    for (User user : cityEntry.getValue()) {
-                        userDTOs.add(new UserDTO(user.getUsername(), user.getName(), user.getEmail(), user.getGender(),
-                            user.getPicture()));
+                    for (var user : cityEntry.getValue()) {
+                        userDTOs.add(UserDTO.from(user));
                     }
                     cityDTOs.add(new UserTreeDTO.CityDTO(cityEntry.getKey(), userDTOs));
                 }
